@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
     implementation "com.simibubi.create:create-1.21.1:${project.create_version}:slim"
+    implementation "net.createmod.ponder:ponder-neoforge:1.0.44"
 }
 
 tasks.withType(JavaCompile).configureEach {
