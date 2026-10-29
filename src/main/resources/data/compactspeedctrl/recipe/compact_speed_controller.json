@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BCB",
+    "SRS",
+    "BCB"
+  ],
+  "key": {
+    "B": { "item": "create:brass_ingot" },
+    "C": { "item": "create:cogwheel" },
+    "S": { "item": "create:shaft" },
+    "R": { "item": "create:rotation_speed_controller" }
+  },
+  "result": { "item": "compactspeedctrl:compact_speed_controller", "count": 1 }
+}

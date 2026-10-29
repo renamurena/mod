@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=down":  { "model": "compactspeedctrl:block/compact_speed_controller", "x": 180 },
+    "facing=up":    { "model": "compactspeedctrl:block/compact_speed_controller" },
+    "facing=north": { "model": "compactspeedctrl:block/compact_speed_controller", "x": 90 },
+    "facing=south": { "model": "compactspeedctrl:block/compact_speed_controller", "x": 90, "y": 180 },
+    "facing=west":  { "model": "compactspeedctrl:block/compact_speed_controller", "x": 90, "y": 270 },
+    "facing=east":  { "model": "compactspeedctrl:block/compact_speed_controller", "x": 90, "y": 90 }
+  }
+}

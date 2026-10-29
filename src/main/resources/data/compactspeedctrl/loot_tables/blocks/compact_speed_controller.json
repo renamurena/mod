@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [ { "type": "minecraft:item", "name": "compactspeedctrl:compact_speed_controller" } ],
+      "rolls": 1.0
+    }
+  ]
+}
