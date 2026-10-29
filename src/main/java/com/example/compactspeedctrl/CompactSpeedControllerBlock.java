@@ -15,10 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * One-block speed controller. Shaft enters from the back of the facing side and leaves from the front, like a clutch.
- * Right click: +10%. Shift + right click: -10%.
- */
 public class CompactSpeedControllerBlock extends DirectionalKineticBlock implements IBE<CompactSpeedControllerBlockEntity> {
 
     public CompactSpeedControllerBlock(Properties properties) {
@@ -55,8 +51,9 @@ public class CompactSpeedControllerBlock extends DirectionalKineticBlock impleme
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         withBlockEntityDo(level, pos, be -> {
-            be.changePercent(player.isShiftKeyDown() ? -10 : 10);
-            player.displayClientMessage(Component.literal("Speed: " + be.getPercent() + "%"), true);
+            // Right-click: +1 RPM; Shift + right-click: -1 RPM.
+            be.changeTargetSpeed(player.isShiftKeyDown() ? -1 : 1);
+            player.displayClientMessage(Component.literal("Target speed: " + be.getTargetSpeed() + " RPM"), true);
         });
         return InteractionResult.SUCCESS;
     }
