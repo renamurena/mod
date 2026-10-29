@@ -9,24 +9,26 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
 
-    /** Output speed as a percentage of input speed. 100 = passthrough, 0 = stopped. */
-    private int percent = 100;
+    /** Target output RPM, matching Create's speed-controller style numeric setting. */
+    private int targetSpeed = 16;
 
     public CompactSpeedControllerBlockEntity(BlockPos pos, BlockState state) {
         super(CompactSpeedCtrlBlockEntities.COMPACT_SPEED_CONTROLLER.get(), pos, state);
     }
 
-    public int getPercent() {
-        return percent;
+    public int getTargetSpeed() {
+        return targetSpeed;
     }
 
-    public void changePercent(int delta) {
-        int next = Math.max(0, Math.min(200, percent + delta));
-        if (next == percent) return;
-        percent = next;
+    public void changeTargetSpeed(int delta) {
+        int next = Math.max(-256, Math.min(256, targetSpeed + delta));
+        if (next == targetSpeed) return;
+        targetSpeed = next;
         setChanged();
         sendData();
         if (level != null && !level.isClientSide) {
+            // Re-propagate the kinetic network so connected machinery receives the new ratio.
+            level.invalidateCapabilities(worldPosition);
             level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
         }
     }
@@ -34,19 +36,21 @@ public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
     @Override
     public float getRotationSpeedModifier(Direction face) {
         Direction output = getBlockState().getValue(CompactSpeedControllerBlock.FACING);
-        // Keep the input side at full speed; apply the selected ratio only to the output shaft.
-        return face == output ? percent / 100f : 1.0f;
+        if (face != output) return 1.0f;
+        float inputSpeed = getTheoreticalSpeed();
+        if (targetSpeed == 0 || inputSpeed == 0) return 0.0f;
+        return targetSpeed / inputSpeed;
     }
 
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
-        tag.putInt("Percent", percent);
+        tag.putInt("TargetSpeed", targetSpeed);
     }
 
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
-        percent = tag.contains("Percent") ? Math.max(0, Math.min(200, tag.getInt("Percent"))) : 100;
+        targetSpeed = tag.contains("TargetSpeed") ? Math.max(-256, Math.min(256, tag.getInt("TargetSpeed"))) : 16;
     }
 }
