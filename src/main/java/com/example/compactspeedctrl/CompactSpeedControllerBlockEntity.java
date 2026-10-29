@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
 
-    /** Output as a percentage of input speed, -200..200. 100 = passthrough, 0 = stopped. */
+    /** Output speed as a percentage of input speed. 100 = passthrough, 0 = stopped. */
     private int percent = 100;
 
     public CompactSpeedControllerBlockEntity(BlockPos pos, BlockState state) {
@@ -21,14 +21,21 @@ public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
     }
 
     public void changePercent(int delta) {
-        percent = Math.max(-200, Math.min(200, percent + delta));
+        int next = Math.max(0, Math.min(200, percent + delta));
+        if (next == percent) return;
+        percent = next;
         setChanged();
         sendData();
+        if (level != null && !level.isClientSide) {
+            level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+        }
     }
 
     @Override
     public float getRotationSpeedModifier(Direction face) {
-        return percent / 100f;
+        Direction output = getBlockState().getValue(CompactSpeedControllerBlock.FACING);
+        // Keep the input side at full speed; apply the selected ratio only to the output shaft.
+        return face == output ? percent / 100f : 1.0f;
     }
 
     @Override
@@ -40,6 +47,6 @@ public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
-        percent = tag.contains("Percent") ? tag.getInt("Percent") : 100;
+        percent = tag.contains("Percent") ? Math.max(0, Math.min(200, tag.getInt("Percent"))) : 100;
     }
 }
