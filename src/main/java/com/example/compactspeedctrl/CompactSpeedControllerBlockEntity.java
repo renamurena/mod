@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
@@ -13,8 +12,8 @@ public class CompactSpeedControllerBlockEntity extends SplitShaftBlockEntity {
     /** Output as a percentage of input speed, -200..200. 100 = passthrough, 0 = stopped. */
     private int percent = 100;
 
-    public CompactSpeedControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public CompactSpeedControllerBlockEntity(BlockPos pos, BlockState state) {
+        super(CompactSpeedCtrlBlockEntities.COMPACT_SPEED_CONTROLLER.get(), pos, state);
     }
 
     public int getPercent() {
