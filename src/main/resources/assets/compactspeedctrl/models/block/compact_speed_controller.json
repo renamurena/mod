@@ -7,6 +7,6 @@
     "south": "compactspeedctrl:block/controller_output_shaft",
     "west": "compactspeedctrl:block/controller_gauge",
     "east": "compactspeedctrl:block/controller_vent",
-    "particle": "compactspeedctrl:block/controller_gauge"
+    "particle": "compactspeedctrl:block/controller_top"
   }
 }
