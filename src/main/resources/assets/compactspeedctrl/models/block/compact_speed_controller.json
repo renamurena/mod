@@ -1,6 +1,12 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube",
   "textures": {
-    "all": "create:block/brass_block"
+    "up": "compactspeedctrl:block/controller_top",
+    "down": "compactspeedctrl:block/controller_bottom",
+    "north": "compactspeedctrl:block/controller_input_shaft",
+    "south": "compactspeedctrl:block/controller_output_shaft",
+    "west": "compactspeedctrl:block/controller_gauge",
+    "east": "compactspeedctrl:block/controller_vent",
+    "particle": "compactspeedctrl:block/controller_gauge"
   }
 }
